@@ -1,8 +1,5 @@
-use std::net::Ipv4Addr;
+use ip_man::run_cli;
 
 fn main() {
-    let ip = Ipv4Addr::new(192, 168, 40, 131);
-    let mask = Ipv4Addr::new(255, 255, 255, 224);
-    let and = ip & mask;
-    println!("{and}");
+    run_cli();
 }
