@@ -1,0 +1,9 @@
+[package]
+    authors = ["Joaquín Zúñiga <jp.zuniga.dev@gmail.com>"]
+    edition = "2024"
+    name    = "ip-man"
+    version = "0.1.0"
+
+[dependencies]
+    clap    = { version = "4.5.53", features = ["cargo", "derive"] }
+    colored = "3.0.0"
