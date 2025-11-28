@@ -4,11 +4,13 @@ mod convert;
 mod ip;
 mod mac;
 mod table;
+mod utils;
 
 use clap::Parser;
 use cli::{IpCli, IpCommands};
 use convert::{convert_ip, convert_mac};
-use table::{mk_classful_table, print_table};
+use table::{mk_classful_table, mk_vlsm_table};
+use utils::print_table;
 
 pub fn run_cli() {
     let args = IpCli::parse();
@@ -16,10 +18,16 @@ pub fn run_cli() {
     match args.command {
         IpCommands::ConvertIp { bin, ip } => convert_ip(bin, ip),
         IpCommands::ConvertMac { bin, mac } => convert_mac(bin, mac),
-        IpCommands::Table {
+        IpCommands::ClassTable {
             base_ip,
             num_subnets,
             num_hosts,
         } => print_table(mk_classful_table(base_ip, num_subnets, num_hosts)),
+        IpCommands::VlsmTable {
+            base_ip,
+            hosts_per_subnet,
+        } => {
+            print_table(mk_vlsm_table(base_ip, hosts_per_subnet));
+        }
     };
 }

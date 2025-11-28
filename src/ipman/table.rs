@@ -13,67 +13,67 @@ pub(crate) fn mk_classful_table(base: Ipv4Addr, subnets: u32, hosts: u32) -> Vec
 
     table.reserve_exact(subnets as usize);
 
-    let mut cur_octets = base.octets();
+    let required_size = hosts + 2;
+    let block_size = required_size.next_power_of_two();
+    let mask_bits = !(block_size - 1);
 
-    for _ in 1..=subnets {
-        let net_id = Ipv4Addr::from(cur_octets);
+    let mask = Ipv4Addr::from(mask_bits);
 
-        incr_octets(&mut cur_octets);
+    let mut current_net_bits = base.to_bits();
 
-        let first_ip = Ipv4Addr::from(cur_octets);
-        let mut last_ip = Ipv4Addr::from(cur_octets);
-        let mut broadcast = Ipv4Addr::from(cur_octets);
+    for _ in 0..subnets {
+        let net_id = Ipv4Addr::from(current_net_bits);
 
-        for host in 1..=hosts {
-            if host == hosts - 2 {
-                last_ip = Ipv4Addr::from(cur_octets);
-                incr_octets(&mut cur_octets);
-                broadcast = Ipv4Addr::from(cur_octets);
-            }
+        let broadcast_bits = current_net_bits | (block_size - 1);
 
-            incr_octets(&mut cur_octets);
-        }
+        let broadcast = Ipv4Addr::from(broadcast_bits);
+        let first_ip = Ipv4Addr::from(current_net_bits + 1);
+        let last_ip = Ipv4Addr::from(broadcast_bits - 1);
 
         table.push(Subnet {
             id: net_id,
             host_range: (first_ip, last_ip),
             broadcast,
-            mask: broadcast,
+            mask,
         });
+
+        current_net_bits += block_size;
     }
 
     table
 }
 
-pub(crate) fn mk_vlsm_table(base: Ipv4Addr, subnets: u16, hosts: u16) -> Vec<Subnet> {
+pub(crate) fn mk_vlsm_table(base: Ipv4Addr, mut needs: Vec<u32>) -> Vec<Subnet> {
     let mut table: Vec<Subnet> = Vec::new();
 
-    table.reserve_exact(subnets as usize);
+    table.reserve_exact(needs.len());
+    needs.sort_unstable_by(|a, b| b.cmp(a));
+
+    let mut current_net_bits = base.to_bits();
+
+    for hosts_needed in needs {
+        let required_size = hosts_needed + 2;
+        let block_size = required_size.next_power_of_two();
+
+        let mask_bits = !(block_size - 1);
+        let broadcast_bits = current_net_bits | (block_size - 1);
+
+        let mask = Ipv4Addr::from(mask_bits);
+        let net_id = Ipv4Addr::from(current_net_bits);
+        let broadcast = Ipv4Addr::from(broadcast_bits);
+
+        let first_ip = Ipv4Addr::from(current_net_bits + 1);
+        let last_ip = Ipv4Addr::from(broadcast_bits - 1);
+
+        table.push(Subnet {
+            id: net_id,
+            host_range: (first_ip, last_ip),
+            broadcast,
+            mask,
+        });
+
+        current_net_bits += block_size;
+    }
 
     table
-}
-
-fn incr_octets(octs: &mut [u8; 4]) {
-    if octs[3] == 255 {
-        octs[3] = 0;
-        octs[2] += 1;
-    }
-
-    if octs[2] == 255 {
-        octs[2] = 0;
-        octs[1] += 1;
-    }
-
-    if octs[1] == 255 {
-        octs[1] = 0;
-        octs[1] += 1;
-    }
-
-    octs[3] += 1;
-}
-
-pub(crate) fn print_table(table: Vec<Subnet>) {
-    for subnet in table {
-        println!("{:#?}", subnet);
-    }
 }

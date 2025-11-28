@@ -1,9 +1,7 @@
 use std::net::Ipv4Addr;
 use std::str::FromStr;
 
-use crate::ipman::ip::ip_from_bin;
-
-use super::ip::ip_to_bin;
+use super::ip::{ip_from_bin, ip_to_bin};
 use super::mac::MacAddr;
 
 pub(crate) fn convert_mac(bin: Option<String>, mac: Option<String>) {

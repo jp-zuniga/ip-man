@@ -9,4 +9,5 @@ pub(crate) const CLI_STYLE: Styles = Styles::styled()
     .literal(AnsiColor::Green.on_default())
     .placeholder(AnsiColor::Blue.on_default());
 
+pub(crate) const COL_WIDTH: usize = 20;
 pub(crate) const MAC_HEX_PAIR_COUNT: usize = 6;

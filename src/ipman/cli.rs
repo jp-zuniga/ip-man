@@ -21,7 +21,7 @@ pub(crate) enum IpCommands {
         #[arg(short, long)]
         mac: Option<String>,
     },
-    Table {
+    ClassTable {
         #[arg(short, long)]
         base_ip: Ipv4Addr,
 
@@ -30,6 +30,13 @@ pub(crate) enum IpCommands {
 
         #[arg(short = 'H', long)]
         num_hosts: u32,
+    },
+    VlsmTable {
+        #[arg(short, long)]
+        base_ip: Ipv4Addr,
+
+        #[arg(short = 'H', long, value_delimiter = ',', num_args = 1..)]
+        hosts_per_subnet: Vec<u32>,
     },
 }
 
