@@ -23,12 +23,12 @@ pub(crate) enum IpCommands {
     },
     Table {
         #[arg(short, long)]
-        subnet_id: Ipv4Addr,
+        base_ip: Ipv4Addr,
 
-        #[arg(short, long)]
+        #[arg(short = 's', long)]
         num_subnets: u32,
 
-        #[arg(short, long)]
+        #[arg(short = 'H', long)]
         num_hosts: u32,
     },
 }
