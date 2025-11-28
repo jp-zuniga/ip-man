@@ -8,7 +8,11 @@ pub(crate) struct Subnet {
     pub(crate) mask: Ipv4Addr,
 }
 
-pub(crate) fn mk_classful_table(base: Ipv4Addr, subnets: u32, hosts: u32) -> Vec<Subnet> {
+pub(crate) fn mk_classful_table(
+    base: Ipv4Addr,
+    subnets: u32,
+    hosts: u32,
+) -> Vec<Subnet> {
     let mut table: Vec<Subnet> = Vec::new();
 
     table.reserve_exact(subnets as usize);

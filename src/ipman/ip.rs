@@ -43,7 +43,11 @@ pub(crate) fn ip_from_bin(bin_ip: &str) -> Result<Ipv4Addr, ()> {
             return Err(());
         }
 
-        let join = if idx != split_len - 1 { "." } else { "" };
+        let join = if idx != split_len - 1 {
+            "."
+        } else {
+            ""
+        };
 
         new_ip.push_str(
             format!(

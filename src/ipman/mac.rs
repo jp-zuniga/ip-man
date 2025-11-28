@@ -1,4 +1,4 @@
-use super::consts::{BASE_16, BASE_2, MAC_HEX_PAIR_COUNT};
+use super::consts::{BASE_2, BASE_16, MAC_HEX_PAIR_COUNT};
 
 pub(crate) struct MacAddr {
     pub(crate) hexes: [u8; MAC_HEX_PAIR_COUNT],
@@ -52,7 +52,8 @@ impl MacAddr {
             };
 
             bin.push_str(
-                format!("{}{hex:b}{join}", "0".repeat(hex.leading_zeros() as usize)).as_str(),
+                format!("{}{hex:b}{join}", "0".repeat(hex.leading_zeros() as usize))
+                    .as_str(),
             );
         }
 
@@ -69,7 +70,9 @@ impl MacAddr {
                 ""
             };
 
-            self_str.push_str(format!("{}{join}", format!("{hex:x}").to_uppercase()).as_str());
+            self_str.push_str(
+                format!("{}{join}", format!("{hex:x}").to_uppercase()).as_str(),
+            );
         }
 
         self_str

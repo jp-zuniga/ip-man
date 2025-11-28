@@ -28,6 +28,6 @@ pub fn run_cli() {
             hosts_per_subnet,
         } => {
             print_table(mk_vlsm_table(base_ip, hosts_per_subnet));
-        }
+        },
     };
 }

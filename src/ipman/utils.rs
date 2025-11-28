@@ -8,11 +8,11 @@ pub(crate) fn print_table(table: Vec<Subnet>) {
     println!();
     println!(
         "{:^w$} {:^w$} {:^w$} {:^w$} {:^w$}",
-        "Network ID".yellow().bold(),
-        "Mask".yellow().bold(),
+        "Subnet ID".yellow().bold(),
         "First Host".yellow().bold(),
         "Last Host".yellow().bold(),
         "Broadcast".yellow().bold(),
+        "Subnet Mask".yellow().bold(),
         w = COL_WIDTH
     );
 
@@ -22,10 +22,10 @@ pub(crate) fn print_table(table: Vec<Subnet>) {
         println!(
             "{:^w$} {:^w$} {:^w$} {:^w$} {:^w$}",
             s.id,
-            s.mask,
             s.host_range.0,
             s.host_range.1,
             s.broadcast,
+            s.mask,
             w = COL_WIDTH
         );
     }
