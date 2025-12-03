@@ -25,7 +25,7 @@ pub(crate) fn print_table(table: Vec<Subnet>) {
             s.host_range.0,
             s.host_range.1,
             s.broadcast,
-            s.mask,
+            format!("{} (/{})", s.mask, s.mask.to_bits().count_ones()),
             w = COL_WIDTH
         );
     }
